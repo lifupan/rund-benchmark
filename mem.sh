@@ -8,6 +8,13 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+USE_POUCH=0
+
+which pouch >/dev/null 2>&1
+if [ $? == 0 ];then
+	USE_POUCH=1
+fi
+
 MEMSZS="512 1024 2048 3072 4096"
 
 DIR=./rund_benchmark
@@ -45,6 +52,9 @@ calc() {
     
     pmap_data=$(./util_parse_pmap.py $pmap_inf)
 
+
+    echo "=========$pmap_data==========="
+
     echo "$mem_kb $vss $rss $vm_total $vm_free $vm_avail $pmap_data $pss $c_total $c_free $c_avail" >> $outf
 }
 
@@ -69,10 +79,16 @@ for MEM in $MEMSZS; do
 	done
 
 	kdbg -i $pod exec "cat /proc/meminfo" >${RUND_PRE}-$MEM-vm.txt
+
+	if [ $USE_POUCH == 1 ]; then
+		pouch exec $pod free --kilo >${RUND_PRE}-$MEM-container.txt
+		pouch stop $pod
+		pouch rm $pod
+	else	
+		crictl exec $cid free --kilo >${RUND_PRE}-$MEM-container.txt
+  		crictl stopp $pod; sudo crictl rmp $pod
+  	fi
 	
-	sudo  crictl exec $cid free --kilo >${RUND_PRE}-$MEM-container.txt
-  	crictl stopp $pod; sudo crictl rmp $pod
-  	
         calc $MEM ${RUND_PRE}-$MEM.txt ${RUND_PRE}-$MEM-vm.txt ${RUND_PRE}-$MEM-pmap.txt ${RUND_RES} $PSS ${RUND_PRE}-$MEM-container.txt
 done
 

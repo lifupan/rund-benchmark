@@ -55,4 +55,4 @@ with open(infn, 'r') as f:
 #            print(l)
 #            sys.exit(1)
 
-sys.stdout.write("%d %d" % (executable, data))
+sys.stdout.write("%d | %d" % (executable, data))
