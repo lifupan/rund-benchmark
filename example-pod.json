@@ -1,0 +1,19 @@
+{
+	"metadata": {
+		"name": "podsandbox79",
+		"attempt": 1
+	},
+	"hostname": "lifupan-hostname",
+	"port_mappings": [
+		{
+			"protocol": 0,
+			"container_port": 80,
+			"host_port": 8080
+		},
+		{
+                        "protocol": 0,
+                        "container_port": 5001,
+                        "host_port": 5001
+                }
+	]
+}

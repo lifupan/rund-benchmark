@@ -1,0 +1,21 @@
+{
+  "metadata": {
+      "name": "ubuntu00"
+  },
+  "image":{
+      "image": "juamorous/ubuntu-ifconfig-ping"
+  },
+  "port_mappings": [{
+        "container_port":80,
+        "host_port": 8080
+    }],
+   "Cmd": ["top"],
+  "mounts": [
+	{
+		"host_path": "/home/fupan/go/src/github.com/opensnoop-native",
+		"container_path": "/opensnoop-native",
+		"readonly": false,
+		"propagation": 2
+	}
+  ]
+}
