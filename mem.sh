@@ -68,7 +68,7 @@ for MEM in $MEMSZS; do
 		PSS=`expr $PSS + $i`
 	done
 
-	kgdb -i $pod exec "cat /proc/meminfo" >${RUND_PRE}-$MEM-vm.txt
+	kdbg -i $pod exec "cat /proc/meminfo" >${RUND_PRE}-$MEM-vm.txt
 	
 	sudo  crictl exec $cid free --kilo >${RUND_PRE}-$MEM-container.txt
   	crictl stopp $pod; sudo crictl rmp $pod
